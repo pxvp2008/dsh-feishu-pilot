@@ -1,0 +1,62 @@
+# dsh-feishu-pilot bundle patch: registers the Feishu remote plugin
+# (host half = index.js, client half = lib/client.js via
+# package.json exports['./client'] + dsh.client.platform web).
+#
+#
+# Config (optional, all defaults shown):
+#   - id: feishu-pilot
+#     config:
+#       tokenTtlMs: 600000        # selector-card token TTL (10 min)
+#       tokenLruMax: 200          # in-memory token LRU cap
+#       repairCooldownMs: 600000  # reconcile repair backoff window (10 min)
+#       repairFailThreshold: 3    # consecutive repair failures before cooldown
+#       nav:
+#         tickMs: 2000            # client poll interval
+#         retryMaxMs: 15000       # client retry budget before nav.fail
+#         retryMaxCount: 8        # client retry count budget
+#       progress:
+#         enabled: false          # progress card (im.message.patch)
+#         intervalMs: 2000        # assistant chunk patch throttle
+#         patchTerminal: false    # false = turn/end stays single-sourced to the notify bus
+#       # ── 任意会话（含桌面 GUI 会话）扩展 ──
+#       notify:                   # 任务结束 → 飞书通知（lib/remote-notify.js）
+#         enabled: true           # 总开关
+#         targetChatId: ''        # oc_/ou_；空 = 自动取 IM 管理员里第一个 feishu:ou_… 的 open_id（p2p 私聊）
+#         includeBound: false     # 飞书绑定会话也推（默认关：绑定聊天已由渠道推结果卡）
+#         includeSubagents: false # 子智能体/团队子会话也推（默认关：防刷屏）
+#         maxSummaryChars: 300    # 摘要尾截断长度
+#         rateLimitMs: 30000      # 每会话限流窗口
+#       remoteApproval:           # 飞书审批 answerer（lib/remote-approval.js，双端同时）
+#         enabled: true           # 总开关
+#         mode: feishu            # feishu=双端同时（GUI 与飞书竞速，先处理者生效） | gui-first=仅 GUI | off=仅 GUI
+#         timeoutSec: 300         # 飞书卡有效窗口 → 仅飞书侧失效，结果以 GUI 最终结算为准
+#         targetChatId: ''        # 同 notify.targetChatId 语义
+#       # ── 交互提问/计划评审 ──
+#       remoteQuestion:           # 飞书提问 answerer（lib/remote-question.js，
+#         enabled: true           #   覆盖 ask_user_question 选项问 + exit_plan_mode 计划评审）
+#         mode: feishu            # 同 remoteApproval.mode 语义
+#         timeoutSec: 300         # 同 remoteApproval.timeoutSec 语义
+#         targetChatId: ''        # 同 notify.targetChatId 语义
+#       # ── 内置 会话运行时 / 渠道配置 ──
+#       imCore:                   # 内置 会话运行时配置
+#         enabled: true           # false = 永不引导（纯工具模式降级）
+#         security:
+#           admins: []            # feishu:ou_… 管理员 = 自动推送目标（空 = deny-all，启动有警告）
+#           allowlist: []         # 运行期信任追加持久化在核心 storeDir（mappings.json）
+#           autoCreate: false
+#           maxSessions: 10
+#           trustOnFirstContact: false
+#         agent:                  # im 派活用的 agent provider
+#           provider: ''
+#           model: ''
+#           workspace: ''
+#         storeDir: ''            # 空 = 插件状态目录 $DSH_HOME/dsh-feishu-pilot
+#       feishuChannel:            # 内置飞书接入凭据/日志（缺凭据 = 优雅断开，到设置页扫码）
+#         appId: 'env:FEISHU_APP_ID'
+#         appSecret: 'env:FEISHU_APP_SECRET'
+#         debug: false
+#         logLevel: 'warn'
+
+- insert:
+    - id: feishu-pilot
+      name: dsh-feishu-pilot

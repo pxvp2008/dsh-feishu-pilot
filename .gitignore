@@ -1,0 +1,19 @@
+node_modules/
+*.log
+.DS_Store
+
+# 隐私/凭据防泄漏：本地 npm 认证与发布产物一律不进版本库
+.npmrc
+.env
+.env.*
+*.tgz
+docs/DEMO.html
+*.pem
+*.key
+
+# 本地截图源（README 使用 images/ 下处理后的版本）
+/安装.png
+/配置页1.png
+/配置页2.png
+/效果演示1.png
+/效果演示2.png
