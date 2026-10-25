@@ -65,7 +65,7 @@ const DEFAULT_CONFIG = Object.freeze({
   },
   // 内置会话配置（lib/core/，引导见 lib/boot.js）。
   // security.admins 默认空 = deny-all（核心会打警告）：真实 open_id 属个人信息，
-  // **不写入可发布的代码**；部署方在 profile 配置里填自己的 feishu:ou_…。
+  // **不写入可发布的代码**；部署方在 profile 配置里填自己的 feishu:ou_…（见 HANDOVER）。
   imCore: {
     enabled: true, // false = 不引导核心（纯工具模式：只剩 feishu_ws 工具）
     security: {
@@ -308,7 +308,7 @@ export function apply(ctx, rawConfig = {}) {
         log(`[feishu-pilot] nav RPC 注册失败 —— GUI 导航跟随不可用（服务端切换不受影响）: ${e?.message}`);
       }
     });
-    const progress = createProgress(ctx, { state, im: core, cards, lark: larkHolder, config });
+    const progress = createProgress(ctx, { state, im: core, cards, lark: larkHolder, config, diag: bootDiag });
     disposers.push(() => progress.dispose());
     // 进度卡已展示正文与统计 ⇒ 抑制“全文单独一条”和绑定会话结果卡，避免多条重复；
     // lark 不可用时进度卡发不出去，结果卡仍是唯一兜底。

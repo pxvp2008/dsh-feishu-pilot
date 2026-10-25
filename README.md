@@ -21,7 +21,9 @@
 - **文件与图片直达模型**：飞书发来的文件自动作为附件（≤20MB/个，单条最多 2 个）；图片可开启（默认关，单条最多 4 张、单张 ≤10MB）。
 - **换机器人免重启**：换 bot 后热重连，旧绑定/授权自动清理；同一时间只连一个机器人。
 - **进度与结果**：绑定会话用进度卡展示过程与终态（耗时、token），非绑定会话推送任务完成通知。
-- **支持 DSH 原生命令**：`/goal`、`/plan`、`/compact`；另有插件命令 `/new`、`/status`、`/output`、`/ws`、`/approve`、`/permission`、`/model`、`/help`。
+- **任务中插话**：任务执行中发 `/steer <文本>`（或 `/插话 <文本>`）即可把补充要求插入当前任务，不用等它跑完。
+- **多选提问也能答**：飞书收到多选提问后，点「回复编号作答」再回复编号（如 `1,3`）即可完成多选。
+- **支持 DSH 原生命令**：`/goal`、`/plan`、`/compact`；另有插件命令 `/new`、`/status`、`/output`、`/ws`、`/steer`、`/approve`、`/permission`、`/model`、`/help`。
 
 ## 环境要求
 
@@ -36,7 +38,7 @@
 通过 **DSH 插件管理器**安装：
 
 1. 打开 DSH → 设置 → **插件管理器**；
-2. 按包名 `dsh-feishu-pilot` 搜索并安装；
+2. 按包名 `dsh-feishu-pilot` 搜索并安装，或者直接添加`git+https://github.com/pxvp2008/dsh-feishu-pilot.git`；
 3. 安装完成后**重启 DSH**。
 
 运行依赖（飞书 SDK、qrcode）会自动安装，不需要单独处理。
@@ -45,7 +47,7 @@
 
 ### 让 AI Agent 安装
 
-把下面这句话直接发给你的 AI Agent：
+把下面这句话直接发给你的 AI Agent：(强烈建议还是通过**DSH 插件管理器**安装)
 
 ```text
 从 https://github.com/pxvp2008/dsh-feishu-pilot.git 安装 DSH 插件 dsh-feishu-pilot
@@ -87,6 +89,7 @@
 | `/status` | 连接、绑定、审批、授权状态 |
 | `/output` | 上一任务的完整输出 |
 | `/approve <id> yes\|no` | 文本方式处理审批 |
+| `/steer <文本>` | 插话：把内容插入当前正在执行的任务（别名 `/插话`；空闲时等同普通消息） |
 | `/goal` | 设置长期任务目标 |
 | `/plan [off\|消息]` | 计划模式开关 |
 | `/compact` | 压缩对话 |
