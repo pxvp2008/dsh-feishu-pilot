@@ -319,8 +319,6 @@ export function apply(ctx, rawConfig = {}) {
     // 任意会话任务结束 → 飞书通知（绑定/子会话默认跳过，lib/remote-notify.js）
     const remoteNotify = createRemoteNotify(ctx, { im: core, config, ovrRef, lark: larkHolder, log });
     disposers.push(() => remoteNotify.dispose());
-    // 完成通知开关：绑定会话的完成结果卡/出错通知也按同一黑名单抑制（进度卡保留）
-    if (core?.notify) core.notify.suppressResultFor = (sessionId) => remoteNotify.isSessionSuppressed(sessionId);
   };
 
   state
