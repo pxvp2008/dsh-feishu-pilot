@@ -234,7 +234,7 @@ export function apply(ctx, rawConfig = {}) {
     // 0.12.0：feishu_send（agent 主动发消息），只允许本会话绑定的聊天
     const registerSend = (c) => {
       try {
-        const def = createSendToolDefinition({ im: core, log, config: config.sendTool });
+        const def = createSendToolDefinition({ im: core, log, config: config.sendTool, ctx });
         if (def) disposers.push(c.tools.register(def));
       } catch (e) {
         log(`feishu_send tool register failed: ${e?.message}`);
